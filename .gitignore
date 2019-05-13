@@ -2,3 +2,4 @@ keras/venv
 keras/.idea
 keras/data
 server/pixiv-filtered-server/node_modules
+web/pixiv-filtered-viewer/node_modules

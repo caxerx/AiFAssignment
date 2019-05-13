@@ -1,5 +1,7 @@
 keras/venv
 keras/.idea
 keras/data
+keras/model.h5
 server/pixiv-filtered-viewer-server/node_modules
 web/pixiv-filtered-viewer/node_modules
+web/pixiv-filtered-viewer/dist

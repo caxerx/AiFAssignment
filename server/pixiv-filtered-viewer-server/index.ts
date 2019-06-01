@@ -6,7 +6,11 @@ import * as PixivAppApi from "pixiv-app-api";
 import PixivSession from "./session";
 import axios from "axios";
 import { getIllusts, getPixivImageAsBuffer, rankIllust } from "./pixiv";
-import { retrain } from "./predict";
+import {
+  retrain,
+  predictCustomImage,
+  addCustomImageToDataset
+} from "./predict";
 axios.defaults.baseURL = "http://127.0.0.1:5000";
 
 const app: express.Application = express();
@@ -20,6 +24,10 @@ let pixivSession = {};
 let trainStatus = { training: false, status: "", progress: 0 };
 
 app.use(bodyParser.json());
+
+var multer = require("multer");
+var upload = multer();
+
 app.use(cors());
 
 app.get("/img", (req, res) => {
@@ -123,6 +131,17 @@ app.get("/api/retrain", (req, res) => {
   retrain().then(resp => {
     res.send(resp.data);
   });
+});
+
+app.post("/api/custompredict", upload.single("image"), (req, res) => {
+  let image = (req as any).file;
+  predictCustomImage(image).then(resp => res.send(resp.data));
+});
+
+app.post("/api/customrank", upload.single("image"), (req, res) => {
+  let rank = req.body.rank;
+  let file = (req as any).file;
+  addCustomImageToDataset(file, rank).then(resp => res.send(resp.data));
 });
 
 io.on("connection", function(socket: any) {

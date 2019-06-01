@@ -1,7 +1,6 @@
 import axios from "axios";
 import * as FormData from "form-data";
 import { getPixivImageAsStream } from "./pixiv";
-
 export async function predictImage(url) {
   let img = await getPixivImageAsStream(url);
   const form = new FormData();
@@ -12,6 +11,27 @@ export async function predictImage(url) {
     }
   });
 }
+
+export async function predictCustomImage(file) {
+    const form = new FormData();
+    form.append("photo", file.buffer, { filename: file.originalname });
+    return await axios.post("/predict", form, {
+      headers: {
+        "Content-Type": `multipart/form-data; boundary=${form._boundary}`
+      }
+    });
+  }
+
+  export async function addCustomImageToDataset(file, rank) {
+    const form = new FormData();
+    form.append("photo", file.buffer, { filename: file.originalname });
+    form.append("rank", rank);
+    return await axios.post("/add", form, {
+      headers: {
+        "Content-Type": `multipart/form-data; boundary=${form._boundary}`
+      }
+    });
+  }
 
 export async function addToDataset(image, rank) {
   const form = new FormData();

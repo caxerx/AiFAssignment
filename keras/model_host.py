@@ -102,7 +102,6 @@ def reload():
 @app.route("/predict", methods=["POST"])
 def predict():
     res = {"success": False}
-
     if 'photo' in flask.request.files:
         photo = flask.request.files['photo']
         mf = load_mem(photo)
